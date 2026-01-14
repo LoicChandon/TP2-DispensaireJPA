@@ -31,3 +31,20 @@ INSERT INTO MEDICAMENT (NOM, CATEGORIE_CODE, QUANTITE_PAR_UNITE, PRIX_UNITAIRE, 
 INSERT INTO MEDICAMENT (NOM, CATEGORIE_CODE, QUANTITE_PAR_UNITE, PRIX_UNITAIRE, UNITES_EN_STOCK, UNITES_COMMANDEES, NIVEAU_DE_REAPPRO, INDISPONIBLE, imageURL) VALUES
 ('Lévofloxacine 500mg', 3, 'Boîte de 7 comprimés', 15.80, 160, 0, 18, true, 'https://images.unsplash.com/photo-1628771065518-0d82f1938462?w=400'),
 ('Clindamycine 300mg', 3, 'Boîte de 16 gélules', 13.20, 140, 0, 16, true, 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400');
+
+
+-- Dispensaires (établissements)
+INSERT INTO DISPENSAIRE (CODE, NOM, CONTACT, TELEPHONE, FONCTION, FAX, ADRESSE, VILLE, REGION, PAYS, CODE_POSTAL) VALUES
+(DEFAULT, 'Dispensaire Central', 'Dr Pierre Martin', '0102030405', 'Directeur', '0102030406', '1 Rue Principale', 'Paris', 'Ile-de-France', 'France', '75001'),
+(DEFAULT, 'Clinique Sainte-Marie', 'Dr Anne Durand', '0605040302', 'Responsable', '0605040303', '12 Avenue de la Santé', 'Lyon', 'Auvergne-Rhône-Alpes', 'France', '69001');
+
+-- Commandes
+INSERT INTO COMMANDE (DISPENSAIRE_CODE, ENVOYEE_LE, SAISIE_LE, PORT, REMISE, DESTINATAIRE, ADRESSE, VILLE, REGION, PAYS, CODE_POSTAL) VALUES
+(1, DATE '2024-01-05', DATE '2024-01-03', 10.00, 0.00, 'Hôpital Saint-Luc', '10 Rue de la Santé', 'Paris', 'Ile-de-France', 'France', '75002'),
+(2, DATE '2024-02-10', DATE '2024-02-08', 12.50, 1.50, 'Clinique Sainte-Marie', '12 Avenue de la Santé', 'Lyon', 'Auvergne-Rhône-Alpes', 'France', '69002');
+
+-- Lignes de commande (références aux médicaments et commandes)
+INSERT INTO LIGNE (ID, QUANTITE, MEDICAMENT_REFERENCE, COMMANDE_NUMERO) VALUES
+(DEFAULT, 50, 1, 1),
+(DEFAULT, 30, 2, 1),
+(DEFAULT, 20, 3, 2);
