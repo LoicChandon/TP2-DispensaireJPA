@@ -40,7 +40,10 @@ public class Categorie {
 
 	@ToString.Exclude
 	// CascadeType.ALL signifie que toutes les opérations CRUD sur la catégorie sont également appliquées à ses médicaments
-	@OneToMany(cascade = {CascadeType.ALL}, mappedBy = "categorie")
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "categorie")
 	private List<Medicament> medicaments = new LinkedList<>();
 
+	public boolean hasNoMedicaments() {
+		return this.medicaments.isEmpty();
+	}
 }

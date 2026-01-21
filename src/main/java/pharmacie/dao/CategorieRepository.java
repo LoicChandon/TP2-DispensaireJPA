@@ -1,6 +1,7 @@
 package pharmacie.dao;
 
 import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import pharmacie.entity.Categorie;
@@ -26,4 +27,13 @@ public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
 	 * @return la liste des catégories dont le libellé contient substring
 	 */
 	List<Categorie> findByLibelleContaining(String substring);
+
+	default void deleteById(Integer id) {
+		this.findById(id).ifPresent(cat -> {
+			if (!cat.hasNoMedicaments()) {
+				throw new IllegalArgumentException("Cannot delete Categorie with medicaments");
+			}
+			this.delete(cat);
+		});
+	}
 }
