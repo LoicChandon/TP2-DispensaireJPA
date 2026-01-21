@@ -185,4 +185,37 @@ public class RepositoryCustomMethodsTest {
 
         assertFalse(commandeRepository.findById(cmdId).isPresent());
     }
+
+    @Test
+    public void testMedicamentsVendusPourCategorie() {
+        List<MedicamentRepository.UnitesParMedicament> results = medicamentRepository.medicamentsVendusPour(1);
+        assertEquals(3, results.size());
+        assertTrue(results.stream().anyMatch(r -> r.getNom().equals("Morphine 10mg") && r.getUnites().longValue()==50L));
+        assertTrue(results.stream().anyMatch(r -> r.getNom().equals("Doliprane Effervescent 1g") && r.getUnites().longValue()==30L));
+        assertTrue(results.stream().anyMatch(r -> r.getNom().equals("Efferalgan Vitamine C") && r.getUnites().longValue()==20L));
+    }
+
+    @Test
+    public void testFindOngoingCommandsForDispensaire() {
+        Dispensaire disp = new Dispensaire("OngoingDisp","Contact","000","Fonction");
+        dispensaireRepository.saveAndFlush(disp);
+
+        // command already sent
+        Commande sent = new Commande();
+        sent.setDestinataire("SentDest");
+        sent.setDispensaire(disp);
+        sent.setEnvoyeeLe(Date.valueOf("2024-01-01"));
+
+        // command ongoing (envoyeeLe == null)
+        Commande ongoing = new Commande();
+        ongoing.setDestinataire("OngoingDest");
+        ongoing.setDispensaire(disp);
+
+        commandeRepository.saveAndFlush(sent);
+        commandeRepository.saveAndFlush(ongoing);
+
+        List<Commande> inProgress = commandeRepository.findCommandesEnCoursByDispensaire(disp.getCode());
+        assertEquals(1, inProgress.size());
+        assertEquals("OngoingDest", inProgress.get(0).getDestinataire());
+    }
 }
